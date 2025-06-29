@@ -1,6 +1,9 @@
 {
-	"name": "Notebook 1",
+	"name": "Notebook 2",
 	"properties": {
+		"folder": {
+			"name": "New folder"
+		},
 		"nbformat": 4,
 		"nbformat_minor": 2,
 		"sessionProperties": {
@@ -13,7 +16,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "69d2d640-8956-4b5c-a56b-8574f1cc81ac"
+				"spark.autotune.trackingId": "24b3c28c-1f1d-4cc0-acfd-bbf0956fed45"
 			}
 		},
 		"metadata": {
@@ -31,14 +34,7 @@
 		"cells": [
 			{
 				"cell_type": "code",
-				"metadata": {
-					"tags": [
-						"parameters"
-					]
-				},
 				"source": [
-					"p_folder_name=\"\"\n",
-					"file_name=f\"abfss://source@bramhapuri.dfs.core.net/{folder_name}/emp.csv\"\n",
 					""
 				],
 				"execution_count": null

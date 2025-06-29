@@ -1,0 +1,139 @@
+{
+	"name": "pl_until",
+	"properties": {
+		"activities": [
+			{
+				"name": "StartValue",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "StartValue",
+					"value": {
+						"value": "@pipeline().parameters.start",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "EndValue",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "StartValue",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "EnvValue",
+					"value": {
+						"value": "@pipeline().parameters.end",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Until",
+				"type": "Until",
+				"dependsOn": [
+					{
+						"activity": "EndValue",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greaterOrEquals(variables('StartValue'),variables('EnvValue'))",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Print the Value",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "New_Val",
+								"value": {
+									"value": "@variables('StartValue')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Increment the Value by 1",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Print the Value",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "StartValue",
+								"value": {
+									"value": "@add(variables('New_Val'),1)",
+									"type": "Expression"
+								}
+							}
+						}
+					],
+					"timeout": "0.12:00:00"
+				}
+			}
+		],
+		"parameters": {
+			"start": {
+				"type": "string"
+			},
+			"end": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"StartCounter": {
+				"type": "Integer"
+			},
+			"StartValue": {
+				"type": "Integer"
+			},
+			"EnvValue": {
+				"type": "Integer"
+			},
+			"New_Val": {
+				"type": "Integer"
+			},
+			"Incremental_Value": {
+				"type": "Integer"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-06-07T14:39:51Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
