@@ -1,0 +1,9 @@
+{
+	"name": "salesadebatch2",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "ee29e5ba-8aa2-4d3a-a51a-6a9c79d8eeeb",
+		"tenantId": "f2871b6e-390f-4f98-be45-ba351bea2cfb"
+	}
+}

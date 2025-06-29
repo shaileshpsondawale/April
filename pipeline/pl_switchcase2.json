@@ -1,0 +1,218 @@
+{
+	"name": "pl_switchcase2",
+	"properties": {
+		"activities": [
+			{
+				"name": "DBConfig",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "ds_dbconfig",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ForEachConfig",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "DBConfig",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('DBConfig').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "SwitchConfig",
+							"type": "Switch",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"on": {
+									"value": "@item().Configname",
+									"type": "Expression"
+								},
+								"cases": [
+									{
+										"value": "DBNAME",
+										"activities": [
+											{
+												"name": "DB NAME",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "DB_NAME",
+													"value": {
+														"value": "@item().configvalues",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"value": "DB_BLK_SIZE",
+										"activities": [
+											{
+												"name": "DB BLOCK SIZE",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "DB_BLK_SIZE",
+													"value": {
+														"value": "@item().configvalues",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"value": "SGA",
+										"activities": [
+											{
+												"name": "Set SGA",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "SGA",
+													"value": {
+														"value": "@item().configvalues",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"value": "Archivelog",
+										"activities": [
+											{
+												"name": "Set Archivelog",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "Archivelog",
+													"value": {
+														"value": "@item().configvalues",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									}
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Execute Pipeline1",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "ForEachConfig",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Lookup",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"db_name": {
+							"value": "@variables('DB_NAME')",
+							"type": "Expression"
+						},
+						"db_blk_size": {
+							"value": "@variables('DB_BLK_SIZE')",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"variables": {
+			"Config": {
+				"type": "String"
+			},
+			"configvalues": {
+				"type": "String"
+			},
+			"DB_NAME": {
+				"type": "String"
+			},
+			"DB_BLK_SIZE": {
+				"type": "String"
+			},
+			"SGA": {
+				"type": "String"
+			},
+			"Archivelog": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-06-01T15:13:31Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

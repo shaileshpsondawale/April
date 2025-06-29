@@ -1,0 +1,151 @@
+{
+	"name": "Until Activity",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set start",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "num_start",
+					"value": {
+						"value": "@int(pipeline().parameters.numstart)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set end",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set start",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "num_end",
+					"value": {
+						"value": "@pipeline().parameters.numend",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Until1",
+				"type": "Until",
+				"dependsOn": [
+					{
+						"activity": "Set end",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greaterOrEquals(variables('num_start'),3)",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Wait1",
+							"type": "Wait",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"waitTimeInSeconds": 1
+							}
+						},
+						{
+							"name": "Increment by one",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Wait1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "increment",
+								"value": {
+									"value": "@add(variables('num_start'),1)",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Update set value",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Increment by one",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "num_start",
+								"value": {
+									"value": "@int(variables('increment'))",
+									"type": "Expression"
+								}
+							}
+						}
+					],
+					"timeout": "0.12:00:00"
+				}
+			}
+		],
+		"parameters": {
+			"numstart": {
+				"type": "int",
+				"defaultValue": 1
+			},
+			"numend": {
+				"type": "int",
+				"defaultValue": 5
+			}
+		},
+		"variables": {
+			"num_start": {
+				"type": "Integer"
+			},
+			"num_end": {
+				"type": "Integer"
+			},
+			"increment": {
+				"type": "Integer"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-06-01T13:37:38Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
