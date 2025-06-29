@@ -1,0 +1,237 @@
+{
+	"name": "pl_collection_functions",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get Metadata1",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_getmetadata",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "First Value",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "First_value",
+					"value": {
+						"value": "@first(activity('Get Metadata1').output.childItems).name",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Last Value",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "First Value",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Last_Value",
+					"value": {
+						"value": "@last(activity('Get Metadata1').output.childItems).name",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Contains",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Last Value",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Contains",
+					"value": {
+						"value": "@bool(contains(activity('Get Metadata1').output.childItems, createArray('Shaielsh')))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Not Contains",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Contains",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Contains",
+					"value": {
+						"value": "@bool(not(contains(activity('Get Metadata1').output.childItems, createArray('Shaielsh'))))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Emptry",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Not Contains",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Emptry",
+					"value": {
+						"value": "@empty(activity('Get Metadata1').output.childItems)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Length_of_Arrary",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Emptry",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Length",
+					"value": {
+						"value": "@length(activity('Get Metadata1').output.childItems)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Joining Arrary",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Length_of_Arrary",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "joins_arrary",
+					"value": {
+						"value": "@join(activity('Get Metadata1').output.childItems,',')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"Filename": {
+				"type": "String"
+			},
+			"new_var": {
+				"type": "Array"
+			},
+			"Last_Value": {
+				"type": "String"
+			},
+			"Contains": {
+				"type": "Boolean"
+			},
+			"Emptry": {
+				"type": "Boolean"
+			},
+			"Length": {
+				"type": "Integer"
+			},
+			"joins_arrary": {
+				"type": "String"
+			},
+			"First_value": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Functions"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-01-11T10:24:04Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

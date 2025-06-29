@@ -1,0 +1,93 @@
+{
+	"name": "df_union",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_emp1",
+						"type": "DatasetReference"
+					},
+					"name": "emp1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_emp2",
+						"type": "DatasetReference"
+					},
+					"name": "emp2"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_emp3",
+						"type": "DatasetReference"
+					},
+					"name": "emp3"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_emp",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "unionthedata"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EMP_ID as integer,",
+				"          EMP_NAME as string,",
+				"          JOB_TITLE as string,",
+				"          MANAGER_ID as string,",
+				"          HIRE_DATE as string,",
+				"          SALARY as integer,",
+				"          DEPT_ID as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> emp1",
+				"source(output(",
+				"          EMP_ID as integer,",
+				"          EMP_NAME as string,",
+				"          JOB_TITLE as string,",
+				"          MANAGER_ID as string,",
+				"          HIRE_DATE as string,",
+				"          SALARY as integer,",
+				"          DEPT_ID as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> emp2",
+				"source(output(",
+				"          EMP_ID as integer,",
+				"          EMP_NAME as string,",
+				"          JOB_TITLE as string,",
+				"          MANAGER_ID as string,",
+				"          HIRE_DATE as string,",
+				"          SALARY as integer,",
+				"          DEPT_ID as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> emp3",
+				"emp1, emp2, emp3 union(byName: true)~> unionthedata",
+				"unionthedata sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['emp_uniondata'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

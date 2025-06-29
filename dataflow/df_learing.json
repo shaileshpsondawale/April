@@ -1,0 +1,122 @@
+{
+	"name": "df_learing",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_emp",
+						"type": "DatasetReference"
+					},
+					"name": "adlsgen2"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_product_sqldb",
+						"type": "DatasetReference"
+					},
+					"name": "productdata"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_emp_sink",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "select1"
+				},
+				{
+					"name": "split1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "sort1"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "sort2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EMP_ID as integer,",
+				"          EMP_NAME as string,",
+				"          JOB_TITLE as string,",
+				"          MANAGER_ID as integer,",
+				"          HIRE_DATE as string,",
+				"          SALARY as integer,",
+				"          DEPT_ID as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> adlsgen2",
+				"source(output(",
+				"          ProductID as integer,",
+				"          Name as string,",
+				"          ProductNumber as string,",
+				"          Color as string,",
+				"          StandardCost as decimal(19,4),",
+				"          ListPrice as decimal(19,4),",
+				"          Size as string,",
+				"          Weight as decimal(8,2),",
+				"          ProductCategoryID as integer,",
+				"          ProductModelID as integer,",
+				"          SellStartDate as timestamp,",
+				"          SellEndDate as timestamp,",
+				"          DiscontinuedDate as timestamp,",
+				"          ThumbNailPhoto as binary,",
+				"          ThumbnailPhotoFileName as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> productdata",
+				"adlsgen2 select(mapColumn(",
+				"          EMP_ID,",
+				"          EMP_NAME,",
+				"          MANAGER_ID,",
+				"          HIRE_DATE,",
+				"          SALARY,",
+				"          DEPT_ID",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"productdata split(isNull(Size),",
+				"     disjoint: false) ~> split1@(BadData, GoodData)",
+				"split1@GoodData derive(Date = currentTimestamp()) ~> derivedColumn1",
+				"derivedColumn1 sort(desc(ProductID, true)) ~> sort1",
+				"sort1 aggregate(groupBy(Color),",
+				"     CountofProducts = count(ProductID)) ~> aggregate1",
+				"aggregate1 sort(desc(CountofProducts, true)) ~> sort2",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          EMP_ID,",
+				"          EMP_NAME,",
+				"          MANAGER_ID,",
+				"          HIRE_DATE,",
+				"          SALARY,",
+				"          DEPT_ID",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}

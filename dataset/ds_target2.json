@@ -1,16 +1,32 @@
 {
-	"name": "ds_getmetadata",
+	"name": "ds_target2",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_adlsgen2",
+			"referenceName": "ls_target2",
 			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"filename": {
+				"type": "string"
+			},
+			"Copy_OutputFolder": {
+				"type": "string"
+			}
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileSystem": "source"
+				"fileName": {
+					"value": "@dataset().filename",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().Copy_OutputFolder",
+					"type": "Expression"
+				},
+				"fileSystem": "target"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

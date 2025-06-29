@@ -1,5 +1,5 @@
 {
-	"name": "ds_config",
+	"name": "ds_sqldb2",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sqldb",
@@ -9,21 +9,19 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "source_tablename",
+				"name": "tablename",
 				"type": "varchar"
 			},
 			{
-				"name": "watermarkcolumn_name",
-				"type": "varchar"
-			},
-			{
-				"name": "target_tablename",
-				"type": "varchar"
+				"name": "watermarkvalue",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "configuration"
+			"table": "watermarktable"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"

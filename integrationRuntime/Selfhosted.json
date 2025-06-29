@@ -1,0 +1,7 @@
+{
+	"name": "Selfhosted",
+	"properties": {
+		"type": "SelfHosted",
+		"description": "This is for On-Prem Data Movement."
+	}
+}

@@ -1,0 +1,173 @@
+{
+	"name": "pl_Date_Functions",
+	"properties": {
+		"activities": [
+			{
+				"name": "utctime",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "utc",
+					"value": {
+						"value": "@utcNow()",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Formate Date",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "utctime",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "formatDate",
+					"value": {
+						"value": "@formatDateTime(variables('utc'),'dd-MM-yyyy')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Add Days",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Formate Date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Add Days",
+					"value": {
+						"value": "@addDays(utcNow(), 5)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Add Days Anotheway",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Add Days",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Add Hours",
+					"value": {
+						"value": "@addToTime(utcNow(),1,'Day')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Add Months",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Add Days Anotheway",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Add Months",
+					"value": {
+						"value": "@addToTime(utcNow(),2,'Month')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Add Time",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Add Months",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Add Time",
+					"value": {
+						"value": "@addminutes(utcNow(),30)",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"utc": {
+				"type": "String"
+			},
+			"formatDate": {
+				"type": "String"
+			},
+			"Add Days": {
+				"type": "String"
+			},
+			"Add Months": {
+				"type": "String"
+			},
+			"Add Hours": {
+				"type": "String"
+			},
+			"Add Time": {
+				"type": "String"
+			},
+			"Equals": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Functions"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-01-12T04:55:04Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

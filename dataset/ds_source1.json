@@ -1,5 +1,5 @@
 {
-	"name": "ds_getmetadata",
+	"name": "ds_source1",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adlsgen2",

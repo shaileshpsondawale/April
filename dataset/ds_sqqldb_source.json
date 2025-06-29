@@ -1,5 +1,5 @@
 {
-	"name": "ds_config",
+	"name": "ds_sqqldb_source",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sqldb",
@@ -7,23 +7,10 @@
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
-		"schema": [
-			{
-				"name": "source_tablename",
-				"type": "varchar"
-			},
-			{
-				"name": "watermarkcolumn_name",
-				"type": "varchar"
-			},
-			{
-				"name": "target_tablename",
-				"type": "varchar"
-			}
-		],
+		"schema": [],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "configuration"
+			"table": "orders"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"

@@ -2,32 +2,26 @@
 	"name": "ds_target",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_bramhapuri",
+			"referenceName": "ls_target2",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"Targetfile": {
+			"FolderOrFile": {
 				"type": "string"
 			}
 		},
 		"annotations": [],
-		"type": "DelimitedText",
+		"type": "Binary",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": {
-					"value": "@dataset().Targetfile",
+				"folderPath": {
+					"value": "@dataset().FolderOrFile",
 					"type": "Expression"
 				},
-				"folderPath": "output",
-				"fileSystem": "source"
-			},
-			"columnDelimiter": ",",
-			"escapeChar": "\\",
-			"firstRowAsHeader": true,
-			"quoteChar": "\""
-		},
-		"schema": []
+				"fileSystem": "target"
+			}
+		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }

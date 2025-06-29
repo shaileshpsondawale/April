@@ -1,8 +1,8 @@
 {
-	"name": "ds_getmetadata",
+	"name": "ds_dept_new",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_adlsgen2",
+			"referenceName": "ls_datalakegen2",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "Dept.csv",
 				"fileSystem": "source"
 			},
 			"columnDelimiter": ",",

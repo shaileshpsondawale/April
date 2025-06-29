@@ -1,0 +1,83 @@
+{
+	"name": "df_general_Understanding",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_dataflow_source",
+						"type": "DatasetReference"
+					},
+					"name": "emp"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_source_dept",
+						"type": "DatasetReference"
+					},
+					"name": "dept"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_inner_join",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "join1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EMP_ID as integer,",
+				"          EMP_NAME as string,",
+				"          JOB_TITLE as string,",
+				"          MANAGER_ID as integer,",
+				"          HIRE_DATE as date 'dd/MM/yyyy',",
+				"          SALARY as integer,",
+				"          DEPT_ID as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> emp",
+				"source(output(",
+				"          DEPT_ID as short,",
+				"          DEPT_NAME as string,",
+				"          LOCATION as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> dept",
+				"emp, dept join(emp@DEPT_ID == dept@DEPT_ID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          EMP_ID,",
+				"          EMP_NAME,",
+				"          JOB_TITLE,",
+				"          MANAGER_ID,",
+				"          HIRE_DATE,",
+				"          SALARY,",
+				"          DEPT_ID = emp@DEPT_ID,",
+				"          DEPT_NAME,",
+				"          LOCATION",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}

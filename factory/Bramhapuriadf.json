@@ -1,0 +1,9 @@
+{
+	"name": "Bramhapuriadf",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "eb8911a1-9196-49ce-9779-a0793f2097ed",
+		"tenantId": "f2871b6e-390f-4f98-be45-ba351bea2cfb"
+	}
+}

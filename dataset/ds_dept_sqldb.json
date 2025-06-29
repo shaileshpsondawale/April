@@ -1,5 +1,5 @@
 {
-	"name": "ds_config",
+	"name": "ds_dept_sqldb",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sqldb",
@@ -9,21 +9,22 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "source_tablename",
+				"name": "DEPT_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DEPT_NAME",
 				"type": "varchar"
 			},
 			{
-				"name": "watermarkcolumn_name",
-				"type": "varchar"
-			},
-			{
-				"name": "target_tablename",
+				"name": "LOCATION",
 				"type": "varchar"
 			}
 		],
 		"typeProperties": {
-			"schema": "dbo",
-			"table": "configuration"
+			"schema": "SalesLT",
+			"table": "Product"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"

@@ -1,0 +1,197 @@
+{
+	"name": "pl_conversion_functions",
+	"properties": {
+		"activities": [
+			{
+				"name": "Int Value",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Int",
+					"value": {
+						"value": "@int('10')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Integer to String",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Int Value",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "inttostring",
+					"value": {
+						"value": "@string(variables('Int'))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Boolean",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Integer to String",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "bool",
+					"value": {
+						"value": "@bool(1)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Array",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Boolean",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "array",
+					"value": {
+						"value": "@array(pipeline().parameters.name)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Create an Arrary",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Array",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "CreateArrary",
+					"value": {
+						"value": "@createArray('shailesh','sondawale')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"name": {
+				"type": "string",
+				"defaultValue": "('shailesh','sondawale')"
+			}
+		},
+		"variables": {
+			"Int": {
+				"type": "Integer"
+			},
+			"inttostring": {
+				"type": "String"
+			},
+			"InttoFloat": {
+				"type": "Integer"
+			},
+			"ToTimestamp": {
+				"type": "String"
+			},
+			"bool": {
+				"type": "Boolean"
+			},
+			"array": {
+				"type": "Array"
+			},
+			"CreateArrary": {
+				"type": "Array"
+			},
+			"utc": {
+				"type": "String"
+			},
+			"formatDate": {
+				"type": "String"
+			},
+			"Add Days": {
+				"type": "String"
+			},
+			"Add Months": {
+				"type": "String"
+			},
+			"Add Hours": {
+				"type": "String"
+			},
+			"Add Time": {
+				"type": "String"
+			},
+			"Equals": {
+				"type": "String"
+			},
+			"Name": {
+				"type": "Boolean"
+			},
+			"First Value": {
+				"type": "String"
+			},
+			"Last Value": {
+				"type": "String"
+			},
+			"Empty": {
+				"type": "Boolean"
+			},
+			"length": {
+				"type": "Integer"
+			},
+			"split": {
+				"type": "String"
+			},
+			"concat": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Functions"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-01-12T09:07:30Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

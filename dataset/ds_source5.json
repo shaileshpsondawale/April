@@ -1,15 +1,24 @@
 {
-	"name": "ds_getmetadata",
+	"name": "ds_source5",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adlsgen2",
 			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"File": {
+				"type": "string"
+			}
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@dataset().File",
+					"type": "Expression"
+				},
 				"fileSystem": "source"
 			},
 			"columnDelimiter": ",",

@@ -1,5 +1,5 @@
 {
-	"name": "ds_getmetadata",
+	"name": "ds_emp3",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adlsgen2",
@@ -10,6 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "emp3.csv",
+				"folderPath": "input",
 				"fileSystem": "source"
 			},
 			"columnDelimiter": ",",

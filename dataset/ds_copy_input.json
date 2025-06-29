@@ -1,12 +1,15 @@
 {
-	"name": "ds_adlsgen2",
+	"name": "ds_copy_input",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adlsgen2",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"Dataset_Filename": {
+			"filename": {
+				"type": "string"
+			},
+			"copy_FolderName": {
 				"type": "string"
 			}
 		},
@@ -16,7 +19,11 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "@dataset().Dataset_Filename",
+					"value": "@dataset().filename",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().copy_FolderName",
 					"type": "Expression"
 				},
 				"fileSystem": "source"
@@ -48,23 +55,11 @@
 				"type": "String"
 			},
 			{
-				"name": "Slow Stochastic %K",
+				"name": "PSAR",
 				"type": "String"
 			},
 			{
-				"name": "Prev. Slow Stochastic %K",
-				"type": "String"
-			},
-			{
-				"name": "Slow Stochastic %D",
-				"type": "String"
-			},
-			{
-				"name": "Prev. Slow Stochastic %D",
-				"type": "String"
-			},
-			{
-				"name": "Chg in %K",
+				"name": "Prev. PSAR",
 				"type": "String"
 			},
 			{
@@ -73,6 +68,14 @@
 			},
 			{
 				"name": "Chg %",
+				"type": "String"
+			},
+			{
+				"name": "Previous Close",
+				"type": "String"
+			},
+			{
+				"name": "Gap %",
 				"type": "String"
 			},
 			{

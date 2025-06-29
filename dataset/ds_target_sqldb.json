@@ -1,29 +1,24 @@
 {
-	"name": "ds_config",
+	"name": "ds_target_sqldb",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sqldb",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"Target_Table": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "AzureSqlTable",
-		"schema": [
-			{
-				"name": "source_tablename",
-				"type": "varchar"
-			},
-			{
-				"name": "watermarkcolumn_name",
-				"type": "varchar"
-			},
-			{
-				"name": "target_tablename",
-				"type": "varchar"
-			}
-		],
+		"schema": [],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "configuration"
+			"table": {
+				"value": "@dataset().Target_Table",
+				"type": "Expression"
+			}
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
